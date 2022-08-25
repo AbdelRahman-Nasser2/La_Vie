@@ -1,11 +1,14 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:la_vie/modules/login/login.dart';
 import 'package:la_vie/shared/components/components.dart';
 import 'package:la_vie/shared/cubit/appCubit/cubit.dart';
 import 'package:la_vie/shared/cubit/appCubit/states.dart';
+import 'package:la_vie/shared/network/local/sharedpreference/sharedpreference.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -205,93 +208,106 @@ class ProfileScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            InkWell(
-                              onTap: () {
-                                showDialog<void>(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text("Change Your Email "),
-                                      content: SingleChildScrollView(
-                                          child: Form(
-                                        key: formKeyEmail,
-                                        child: Column(
-                                          children: [
-                                            tffLogin(
-                                              controller: emailController,
-                                              input: TextInputType.emailAddress,
-                                              validate: (String? value) {
-                                                if (value!.isEmpty) {
-                                                  return 'email must be not empty';
-                                                } else if (!value
-                                                        .toString()
-                                                        .contains('@') ||
-                                                    !value
-                                                        .toString()
-                                                        .contains('.com')) {
-                                                  return 'ex: example@mail.com';
-                                                } else {
-                                                  return null;
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      )),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: const Text('Save Changes'),
-                                          onPressed: () {
-                                            if (formKeyName.currentState!
-                                                .validate()) {
-                                              cubit.updateUserData(
-                                                  key: "email",
-                                                  value: emailController.text);
-                                              Navigator.pop(context);
-                                            }
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: Container(
-                                height: 70,
-                                decoration: BoxDecoration(
-                                    color: Colors.grey[400],
-                                    borderRadius: BorderRadius.circular(20)),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15),
-                                      child: SvgPicture.asset(
-                                          "assets/icons/change.svg"),
-                                    ),
-                                    Text(
-                                      "Change Email",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 18,
-                                        color: HexColor("#2F2E2E"),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 20),
+                              child: InkWell(
+                                onTap: () {
+                                  showDialog<void>(
+                                    context: context,
+                                    barrierDismissible: true,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text("Change Your Email "),
+                                        content: SingleChildScrollView(
+                                            child: Form(
+                                          key: formKeyEmail,
+                                          child: Column(
+                                            children: [
+                                              tffLogin(
+                                                controller: emailController,
+                                                input:
+                                                    TextInputType.emailAddress,
+                                                validate: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'email must be not empty';
+                                                  } else if (!value
+                                                          .toString()
+                                                          .contains('@') ||
+                                                      !value
+                                                          .toString()
+                                                          .contains('.com')) {
+                                                    return 'ex: example@mail.com';
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        )),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            child: const Text('Save Changes'),
+                                            onPressed: () {
+                                              if (formKeyName.currentState!
+                                                  .validate()) {
+                                                cubit.updateUserData(
+                                                    key: "email",
+                                                    value:
+                                                        emailController.text);
+                                                Navigator.pop(context);
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey[400],
+                                      borderRadius: BorderRadius.circular(20)),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 15),
+                                        child: SvgPicture.asset(
+                                            "assets/icons/change.svg"),
                                       ),
-                                    ),
-                                    const Spacer(),
-                                    const Icon(Icons.arrow_forward_ios),
-                                  ],
+                                      Text(
+                                        "Change Email",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 18,
+                                          color: HexColor("#2F2E2E"),
+                                        ),
+                                      ),
+                                      const Spacer(),
+                                      const Icon(Icons.arrow_forward_ios),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                             const SizedBox(
                               height: 10,
                             ),
+                            startButton(
+                                text: "LogOut",
+                                ontap: () {
+                                  CacheHelper.removeData(key: "token").then(
+                                      (value) => navigateAndFinish(
+                                          context, const MainLogin()));
+                                }),
                           ],
                         ),
                       )
