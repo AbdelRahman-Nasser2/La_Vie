@@ -306,7 +306,7 @@ class ProfileScreen extends StatelessWidget {
                                 ontap: () {
                                   CacheHelper.removeData(key: "token").then(
                                       (value) => navigateAndFinish(
-                                          context, MainLogin()));
+                                          context, const MainLogin()));
                                 }),
                           ],
                         ),
