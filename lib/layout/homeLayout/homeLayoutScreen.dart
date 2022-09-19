@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:la_vie/shared/cubit/appCubit/cubit.dart';
 import 'package:la_vie/shared/cubit/appCubit/states.dart';
+import 'package:la_vie/shared/cubit/user_cubit/cubit.dart';
 
 class HomeLayoutScreen extends StatefulWidget {
   const HomeLayoutScreen({Key? key}) : super(key: key);
@@ -16,12 +17,16 @@ class HomeLayoutScreen extends StatefulWidget {
 class _HomeLayoutScreenState extends State<HomeLayoutScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (BuildContext context) => AppCubit()
-          ..getDataSeeds()
-          ..getUserData()
-          ..getDataPlants()
-          ..getDataTools(),
+    return MultiBlocProvider(
+
+    //     BuildContext context) => AppCubit()..getDataSeeds()
+
+        providers: [
+          BlocProvider(create: (BuildContext context)=>AppCubit()..getUserData()
+    ..getDataPlants()
+    ..getDataTools(),),
+          BlocProvider(create: (BuildContext context)=>UserDataCubit()..getUserData(),),
+        ],
         child: BlocConsumer<AppCubit, AppStates>(
           listener: (BuildContext context, state) {},
           builder: (BuildContext context, Object? state) {

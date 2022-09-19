@@ -6,27 +6,27 @@ import 'package:la_vie/shared/components/components.dart';
 import 'package:la_vie/shared/cubit/appCubit/cubit.dart';
 import 'package:la_vie/shared/cubit/appCubit/states.dart';
 
-class AllProductsScreen extends StatelessWidget {
-  const AllProductsScreen({Key? key}) : super(key: key);
+class SeedsScreen extends StatelessWidget {
+  const SeedsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getDataPlants(),
+      create: (BuildContext context) => AppCubit()..getDataSeeds(),
       child: BlocConsumer<AppCubit, AppStates>(
           listener: (BuildContext context, AppStates state) {},
           builder: (BuildContext context, AppStates state) {
-            var model = AppCubit.get(context).plantModel;
-
+            var list = AppCubit.get(context);
+            var model = list.seedModel;
             return ConditionalBuilder(
-              condition: state is! PlantsGetDataLoading,
+              condition: state is! SeedsGetDataLoading?true:false,
               fallback: (BuildContext context) => Center(
                 child: CircularProgressIndicator(
                   color: HexColor("#1ABC00"),
                 ),
               ),
               builder: (BuildContext context) {
-                return buildCategeoryList(model!);
+                return buildCategoryList(model!);
               },
             );
           }),

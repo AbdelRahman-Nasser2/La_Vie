@@ -9,6 +9,7 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: HexColor("#1ABC00"),
         title: const Center(
             child: Text(
           'Notification',
@@ -128,44 +129,9 @@ class NotificationScreen extends StatelessWidget {
                           ),
                         ),
                         if (false)
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 70,
-                              width: double.infinity,
-                              child: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 4),
-                                    child: Container(
-                                      width: 2,
-                                      height: double.infinity,
-                                      color: HexColor('#DDDEE1'),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                        child: Column(
-                                      children: [
-                                        Text(
-                                          '“ leaves are an integral part of the stem system. They are attached by a continuous vascular system to the rest of the plant so that free exchange of nutrients.” ',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            color: HexColor('#1A1F36'),
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          const SizedBox(
+                            height: 5,
                           ),
-                        const SizedBox(
-                          height: 5,
-                        ),
                         Text(
                           'Yesterday at 11:42 PM',
                           style: TextStyle(

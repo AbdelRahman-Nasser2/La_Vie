@@ -19,14 +19,14 @@ class PlantsScreen extends StatelessWidget {
             var model = AppCubit.get(context).plantModel;
 
             return ConditionalBuilder(
-              condition: state is! PlantsGetDataLoading,
+              condition: state is! PlantsGetDataLoading?true:false,
               fallback: (BuildContext context) => Center(
                 child: CircularProgressIndicator(
                   color: HexColor("#1ABC00"),
                 ),
               ),
               builder: (BuildContext context) {
-                return buildCategeoryList(model);
+                return buildCategoryList(model);
               },
             );
           }),

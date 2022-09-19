@@ -6,6 +6,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:la_vie/shared/components/components.dart';
 import 'package:la_vie/shared/cubit/login_cubit/cubit.dart';
 import 'package:la_vie/shared/cubit/login_cubit/states.dart';
+import 'package:la_vie/shared/style/colors.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -82,7 +83,8 @@ class LoginScreen extends StatelessWidget {
                   ConditionalBuilder(
                     condition: state is! LoginLoadingState,
                     builder: (BuildContext context) {
-                      return startButton(
+                      return defaultButton(
+                        colorButton: defaultColor,
                           text: "Login",
                           ontap: () async {
                             if (formKey.currentState!.validate()) {

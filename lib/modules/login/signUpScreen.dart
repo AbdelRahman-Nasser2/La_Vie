@@ -5,6 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:la_vie/shared/components/components.dart';
 import 'package:la_vie/shared/cubit/login_cubit/cubit.dart';
 import 'package:la_vie/shared/cubit/login_cubit/states.dart';
+import 'package:la_vie/shared/style/colors.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -128,7 +129,8 @@ class SignUpScreen extends StatelessWidget {
                   const SizedBox(
                     height: 40,
                   ),
-                  startButton(
+                  defaultButton(
+                    colorButton: defaultColor,
                       text: "Login",
                       ontap: () async {
                         if (formKey.currentState!.validate()) {
