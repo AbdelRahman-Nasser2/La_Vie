@@ -206,7 +206,8 @@ class DioHelper {
     bool files = false,
   }) async {
     dio.options.headers = {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Bearer ${token ?? ''}',
+      'Accept':'application/json',
       // 'Authorization': token ,
       'Content-Type': 'application/json',
     };

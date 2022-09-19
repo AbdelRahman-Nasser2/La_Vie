@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, constant_identifier_names
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:la_vie/modules/search/searchscreen.dart';
 import 'package:la_vie/shared/components/constant.dart';
+import 'package:la_vie/shared/style/colors.dart';
 
 //Login Screen components
 
@@ -86,7 +88,7 @@ Widget itemLogin({
           height: 5,
         ),
         TextFormField(
-          cursorColor: HexColor("#1ABC00"),
+          cursorColor: defaultColor,
           obscureText: passwordShow,
           controller: controller,
           validator: validate,
@@ -133,18 +135,23 @@ Widget itemLogin({
     );
 
 //Start Button
-Widget startButton({
+Widget defaultButton(
+
+    {
   @required String? text,
   @required Function()? ontap,
   double height = 50,
   double radius = 5,
-}) =>
+required colorButton,
+}
+
+) =>
     InkWell(
       onTap: ontap,
       child: Container(
         height: height,
         decoration: BoxDecoration(
-            color: HexColor("#1ABC00"),
+            color: colorButton,
             borderRadius: BorderRadius.circular(radius)),
         child: Center(
           child: Text(
@@ -162,7 +169,7 @@ Widget startButton({
 
 //App Items Shapes
 
-Widget searchShap(context) => InkWell(
+Widget searchShape(context) => InkWell(
       onTap: () {
         navigateTo(context, SearchScreen());
       },
@@ -258,7 +265,7 @@ Widget search({
       ),
     );
 
-Widget categeoryItem(
+Widget categoryItem(
   model,
 ) =>
     Stack(
@@ -300,7 +307,7 @@ Widget categeoryItem(
               const SizedBox(
                 height: 10,
               ),
-              startButton(text: "Add To Cart", ontap: () {}, radius: 20)
+              defaultButton(text: "Add To Cart", ontap: () {}, radius: 20,colorButton: defaultColor)
             ],
           ),
         ),
@@ -319,12 +326,12 @@ Widget categeoryItem(
                 image: DecorationImage(
                     filterQuality: FilterQuality.high,
                     fit: BoxFit.cover,
-                    image: (model.imageUrl == null)
-                        ? NetworkImage(
-                            "https://lavie.orangedigitalcenteregypt.com/uploads/09be504b-99e3-481d-9653-9b6c791741dc.png")
-                        : NetworkImage(
-                            "https://lavie.orangedigitalcenteregypt.com${model.imageUrl}",
-                          )),
+                    image: NetworkImage(
+                        model.imageUrl == ""?
+                        "https://lavie.orangedigitalcenteregypt.com/uploads/09be504b-99e3-481d-9653-9b6c791741dc.png"
+                            :"https://lavie.orangedigitalcenteregypt.com${model.imageUrl}",
+                    ),
+                      ),
                 borderRadius: BorderRadius.circular(20)),
           ),
         ),
@@ -376,8 +383,9 @@ Widget categeoryItem(
       ],
     );
 
-Widget buildCategeoryList(model) => GridView.builder(
+Widget buildCategoryList(model) => GridView.builder(
       physics: physics,
+      shrinkWrap: true,
       padding: const EdgeInsetsDirectional.only(
           start: 20, top: 60, bottom: 30, end: 20),
       itemCount: model.data?.length,
@@ -388,7 +396,7 @@ Widget buildCategeoryList(model) => GridView.builder(
           mainAxisExtent: 250,
           mainAxisSpacing: 60,
           crossAxisSpacing: 40),
-      itemBuilder: (context, index) => categeoryItem(
+      itemBuilder: (context, index) => categoryItem(
         model.data![index],
       ),
     );

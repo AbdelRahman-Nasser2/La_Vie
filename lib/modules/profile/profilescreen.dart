@@ -1,48 +1,31 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:la_vie/modules/login/login.dart';
 import 'package:la_vie/shared/components/components.dart';
-import 'package:la_vie/shared/cubit/appCubit/cubit.dart';
-import 'package:la_vie/shared/cubit/appCubit/states.dart';
+
+import 'package:la_vie/shared/cubit/user_cubit/states.dart';
 import 'package:la_vie/shared/network/local/sharedpreference/sharedpreference.dart';
+
+import '../../shared/cubit/user_cubit/cubit.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AppCubit, AppStates>(
-        listener: (BuildContext context, AppStates state) {},
-        builder: (BuildContext context, AppStates state) {
-          var model = AppCubit.get(context).userCurrentModel!.data;
-          var cubit = AppCubit.get(context);
-          var formKeyEmail = GlobalKey<FormState>();
-          var formKeyName = GlobalKey<FormState>();
-          var emailController = TextEditingController();
-          var nameController = TextEditingController();
+    return BlocConsumer<UserDataCubit,  UserDataStates>(
+        listener: (BuildContext context,  UserDataStates state) {},
+        builder: (BuildContext context,  UserDataStates state) {
+
+          var cubit = UserDataCubit.get(context);
 
           return ConditionalBuilder(
-            condition: cubit.userCurrentModel?.data != null,
+            condition: state is! UserGetDataLoading?true:false,
             builder: (BuildContext context) => SafeArea(
               child: Scaffold(
                 extendBodyBehindAppBar: true,
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  leading: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.black,
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
                 body: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -56,7 +39,7 @@ class ProfileScreen extends StatelessWidget {
                             height: 300,
                             child: Image(
                               image: NetworkImage(
-                                "${model!.imageUrl}",
+                                "${cubit.userCurrentModel!.data?.imageUrl}",
                               ),
                               fit: BoxFit.cover,
                               filterQuality: FilterQuality.high,
@@ -64,32 +47,36 @@ class ProfileScreen extends StatelessWidget {
                               color: Colors.black87,
                             ),
                           ),
-                          Positioned(
-                            top: 100,
-                            left: 100,
-                            child: Column(
+                          Padding(
+                            padding: const EdgeInsets.only(top: 100),
+                            child: Align(
+                              // heightFactor: 0,
+                              alignment: Alignment.center,
+                              child:  Column(
                               children: [
                                 CircleAvatar(
                                   radius: 70,
                                   backgroundImage:
-                                      NetworkImage("${model.imageUrl}"),
+                                  NetworkImage("${cubit.userCurrentModel!.data?.imageUrl}"),
                                 ),
                                 Text(
-                                  "${model.firstName} ${model.lastName}",
+                                  "${cubit.userCurrentModel!.data?.firstName} ${cubit.userCurrentModel!.data?.lastName}",
                                   style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w700,
                                       fontSize: 29),
                                 )
                               ],
-                            ),
-                          )
+                            ),),
+                          ),
                         ],
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.max,
+
                           children: [
                             const SizedBox(
                               height: 14,
@@ -111,9 +98,9 @@ class ProfileScreen extends StatelessWidget {
                                   const SizedBox(
                                     width: 15,
                                   ),
-                                  Text((model.userPoints == null)
+                                  Text((cubit.userCurrentModel!.data?.userPoints == null)
                                       ? "You have 0 points"
-                                      : "You have ${model.userPoints} points"),
+                                      : "You have ${cubit.userCurrentModel!.data?.userPoints} points"),
                                 ],
                               ),
                             ),
@@ -139,11 +126,11 @@ class ProfileScreen extends StatelessWidget {
                                         title: const Text("Change Your Name "),
                                         content: SingleChildScrollView(
                                             child: Form(
-                                          key: formKeyName,
+                                          key: cubit.formKeyName,
                                           child: Column(
                                             children: [
                                               tffLogin(
-                                                controller: nameController,
+                                                controller: cubit.nameController,
                                                 input: TextInputType.name,
                                                 validate: (String? value) {
                                                   if (value!.isEmpty) {
@@ -160,11 +147,11 @@ class ProfileScreen extends StatelessWidget {
                                           TextButton(
                                             child: const Text('Save Changes'),
                                             onPressed: () {
-                                              if (formKeyName.currentState!
+                                              if (cubit.formKeyName.currentState!
                                                   .validate()) {
                                                 cubit.updateUserData(
                                                     key: "firstName",
-                                                    value: nameController.text);
+                                                    value: cubit.nameController.text);
                                                 Navigator.pop(context);
                                               }
                                             },
@@ -220,11 +207,11 @@ class ProfileScreen extends StatelessWidget {
                                         title: const Text("Change Your Email "),
                                         content: SingleChildScrollView(
                                             child: Form(
-                                          key: formKeyEmail,
+                                          key:cubit.formKeyEmail,
                                           child: Column(
                                             children: [
                                               tffLogin(
-                                                controller: emailController,
+                                                controller: cubit.emailController,
                                                 input:
                                                     TextInputType.emailAddress,
                                                 validate: (String? value) {
@@ -249,12 +236,12 @@ class ProfileScreen extends StatelessWidget {
                                           TextButton(
                                             child: const Text('Save Changes'),
                                             onPressed: () {
-                                              if (formKeyName.currentState!
+                                              if (cubit.formKeyName.currentState!
                                                   .validate()) {
                                                 cubit.updateUserData(
                                                     key: "email",
                                                     value:
-                                                        emailController.text);
+                                                        cubit.emailController.text);
                                                 Navigator.pop(context);
                                               }
                                             },
@@ -301,8 +288,10 @@ class ProfileScreen extends StatelessWidget {
                             const SizedBox(
                               height: 15,
                             ),
-                            startButton(
+                            defaultButton(
+                              colorButton: Colors.red,
                                 text: "LogOut",
+
                                 ontap: () {
                                   CacheHelper.removeData(key: "token").then(
                                       (value) => navigateAndFinish(
@@ -317,8 +306,12 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             fallback: (BuildContext context) =>
-                const Center(child: CircularProgressIndicator()),
+                Center(child: CircularProgressIndicator(
+
+                  color: HexColor("#1ABC00"),
+
+                ),),
           );
-        });
+        },);
   }
 }

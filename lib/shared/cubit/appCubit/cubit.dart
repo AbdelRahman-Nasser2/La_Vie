@@ -64,6 +64,8 @@ class AppCubit extends Cubit<AppStates> {
       CacheHelper.saveData(
           key: "imageUrl", value: userCurrentModel?.data!.imageUrl);
       CacheHelper.saveData(key: "role", value: userCurrentModel?.data!.role);
+      print(userCurrentModel!.data!.firstName );
+      print(token);
 
       emit(UserGetDataSuccess());
     }).catchError((error) {
@@ -112,6 +114,7 @@ class AppCubit extends Cubit<AppStates> {
     });
   }
 
+  List <ToolsModel> mm=[];
   ToolsModel? toolsModel;
   void getDataTools() {
     emit(ToolsGetDataLoading());

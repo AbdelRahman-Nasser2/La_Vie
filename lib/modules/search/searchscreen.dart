@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:la_vie/shared/components/components.dart';
+import 'package:la_vie/shared/style/colors.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -42,7 +42,10 @@ class SearchScreen extends StatelessWidget {
                     ),
                   ),
                   const Text("70 EGP"),
-                  startButton(text: "Add To Cart", ontap: () {}, radius: 20)
+                  defaultButton(
+                      colorButton: defaultColor,
+                      text: "Add To Cart",
+                      ontap: () {}, radius: 20)
                 ],
               ),
             ),

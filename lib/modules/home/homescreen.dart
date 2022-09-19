@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:la_vie/modules/homeScreens/allProductsScreen.dart';
+import 'package:la_vie/modules/home/allproductsscreen.dart';
 import 'package:la_vie/modules/shoppingcart/shoppingcart.dart';
 import 'package:la_vie/shared/components/components.dart';
 import 'package:la_vie/shared/components/constant.dart';
 
-import '../homeScreens/plantsscreen.dart';
-import '../homeScreens/seedsscreen.dart';
-import '../homeScreens/toolsscreens.dart';
+import 'plantsscreen.dart';
+import 'seedsscreen.dart';
+import 'toolsscreens.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,6 +33,8 @@ class HomeScreen extends StatelessWidget {
           centerTitle: true,
         ),
         body: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
               padding:
@@ -40,7 +42,7 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: searchShap(context),
+                    child: searchShape(context),
                   ),
                   const SizedBox(
                     width: 15,
@@ -66,6 +68,7 @@ class HomeScreen extends StatelessWidget {
               height: 20,
             ),
             TabBar(
+              padding: EdgeInsets.zero,
               physics: physics,
               labelColor: HexColor("#1ABC00"),
               unselectedLabelColor: Colors.grey,
@@ -156,7 +159,9 @@ class HomeScreen extends StatelessWidget {
               height: 10,
             ),
             const Expanded(
-              child: TabBarView(physics: BouncingScrollPhysics(), children: [
+              child: TabBarView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
                 AllProductsScreen(),
                 PlantsScreen(),
                 SeedsScreen(),

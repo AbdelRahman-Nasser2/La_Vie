@@ -44,7 +44,7 @@ class PostsScreen extends StatelessWidget {
                       onTap: () {
                         navigateTo(context, const SearchScreen());
                       },
-                      child: searchShap(context),
+                      child: searchShape(context),
                     ),
                     TabBar(
                       labelColor: HexColor('#1ABC00'),
