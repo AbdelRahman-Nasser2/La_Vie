@@ -26,6 +26,12 @@ class UpdateUserDataError extends AppStates {
   UpdateUserDataError(this.error);
 }
 
+
+
+
+
+
+
 class SeedsGetDataLoading extends AppStates {}
 
 class SeedsGetDataSuccess extends AppStates {}
@@ -51,7 +57,7 @@ class PlantsGetDataLoading extends AppStates {}
 class PlantsGetDataSuccess extends AppStates {}
 
 class PlantsGetDataError extends AppStates {
-  final dynamic error;
+  String? error;
 
   PlantsGetDataError(this.error);
 }
@@ -77,3 +83,13 @@ class AllProductsGetDataError extends AppStates {
 
   AllProductsGetDataError(this.error);
 }
+
+
+class ProductsGetDataLoading extends AppStates {}
+
+class ProductsGetDataSuccess extends AppStates {}
+
+class ProductsGetDataError extends AppStates {
+  final dynamic error;
+
+  ProductsGetDataError(this.error);}

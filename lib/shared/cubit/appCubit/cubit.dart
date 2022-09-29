@@ -4,6 +4,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:la_vie/models/ProductsModel.dart';
 import 'package:la_vie/models/allproduct_Model.dart';
 import 'package:la_vie/models/plants_model.dart';
 import 'package:la_vie/models/post_model.dart';
@@ -110,11 +111,14 @@ class AppCubit extends Cubit<AppStates> {
       plantModel = PlantsModel.fromJson(value.data);
       emit(PlantsGetDataSuccess());
     }).catchError((error) {
-      emit(PlantsGetDataError(error));
+      if(kDebugMode){
+        print(error.toString());
+      }
+      emit(PlantsGetDataError(error.toString()));
     });
   }
 
-  List <ToolsModel> mm=[];
+  // List <ToolsModel> mm=[];
   ToolsModel? toolsModel;
   void getDataTools() {
     emit(ToolsGetDataLoading());
@@ -132,6 +136,27 @@ class AppCubit extends Cubit<AppStates> {
       emit(ToolsGetDataError(error));
     });
   }
+
+
+  ProductsModel? productsModel;
+  void getProducts() {
+    emit(ProductsGetDataLoading());
+    DioHelper.getData(
+      url: PRODUCTS,
+      token: token,
+    ).then((value) {
+      productsModel = ProductsModel.fromJson(value.data);
+      emit(ProductsGetDataSuccess());
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      emit(ProductsGetDataError(error.toString()));
+    });
+  }
+
+
+
 
   MyPostsModel? myPostsModel;
   void getMyPosts(String token) {

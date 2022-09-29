@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:la_vie/layout/homeLayout/homeLayoutScreen.dart';
 import 'package:la_vie/modules/login/login.dart';
 import 'package:la_vie/shared/components/components.dart';
 
 import 'package:la_vie/shared/cubit/user_cubit/states.dart';
-import 'package:la_vie/shared/network/local/sharedpreference/sharedpreference.dart';
 
 import '../../shared/cubit/user_cubit/cubit.dart';
 
@@ -130,7 +130,19 @@ class ProfileScreen extends StatelessWidget {
                                           child: Column(
                                             children: [
                                               tffLogin(
-                                                controller: cubit.nameController,
+                                                controller: cubit.firstNameController,
+                                                input: TextInputType.name,
+                                                validate: (String? value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'name must be not empty';
+                                                  } else {
+                                                    return null;
+                                                  }
+                                                },
+                                              ),
+                                              SizedBox(height: 10,),
+                                              tffLogin(
+                                                controller: cubit.lastNameController,
                                                 input: TextInputType.name,
                                                 validate: (String? value) {
                                                   if (value!.isEmpty) {
@@ -142,17 +154,18 @@ class ProfileScreen extends StatelessWidget {
                                               ),
                                             ],
                                           ),
-                                        )),
+                                        ),
+                                        ),
                                         actions: <Widget>[
                                           TextButton(
                                             child: const Text('Save Changes'),
                                             onPressed: () {
                                               if (cubit.formKeyName.currentState!
                                                   .validate()) {
-                                                cubit.updateUserData(
-                                                    key: "firstName",
-                                                    value: cubit.nameController.text);
-                                                Navigator.pop(context);
+                                                cubit.updateUserName(
+                                                    firstValue: cubit.firstNameController.text,
+                                                    lastValue: cubit.lastNameController.text);
+                                                navigateAndFinish(context, const HomeLayoutScreen());
                                               }
                                             },
                                           ),
@@ -238,7 +251,7 @@ class ProfileScreen extends StatelessWidget {
                                             onPressed: () {
                                               if (cubit.formKeyName.currentState!
                                                   .validate()) {
-                                                cubit.updateUserData(
+                                                cubit.updateUserEmail(
                                                     key: "email",
                                                     value:
                                                         cubit.emailController.text);
@@ -293,9 +306,12 @@ class ProfileScreen extends StatelessWidget {
                                 text: "LogOut",
 
                                 ontap: () {
-                                  CacheHelper.removeData(key: "token").then(
-                                      (value) => navigateAndFinish(
-                                          context, const MainLogin()));
+                                  // CacheHelper.removeData(key: "refreshToken");
+                                  cubit.signOut(context, const MainLogin());
+                                  // CacheHelper.removeData(key: "token")
+                                 // .then(
+                                 //      (value) => navigateAndFinish(
+                                 //          context, const MainLogin()));
                                 }),
                           ],
                         ),

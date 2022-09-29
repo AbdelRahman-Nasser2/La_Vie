@@ -16,12 +16,21 @@ class UserGetDataError extends UserDataStates {
   UserGetDataError(this.error);
 }
 
-class UpdateUserDataLoading extends UserDataStates {}
+class UpdateUserNameLoading extends UserDataStates {}
 
-class UpdateUserDataSuccess extends UserDataStates {}
+class UpdateUserNameSuccess extends UserDataStates {}
 
-class UpdateUserDataError extends UserDataStates {
+class UpdateUserNameError extends UserDataStates {
   final dynamic error;
 
-  UpdateUserDataError(this.error);
+  UpdateUserNameError(this.error);
+}
+class UpdateUserEmailLoading extends UserDataStates {}
+
+class UpdateUserEmailSuccess extends UserDataStates {}
+
+class UpdateUserEmailError extends UserDataStates {
+  final dynamic error;
+
+  UpdateUserEmailError(this.error);
 }
