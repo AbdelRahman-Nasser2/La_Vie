@@ -12,14 +12,16 @@ class AllProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (BuildContext context) => AppCubit()..getDataPlants(),
+      create: (BuildContext context) => AppCubit()..getProducts(),
       child: BlocConsumer<AppCubit, AppStates>(
           listener: (BuildContext context, AppStates state) {},
           builder: (BuildContext context, AppStates state) {
-            var model = AppCubit.get(context).plantModel;
+            var model = AppCubit.get(context).productsModel;
 
             return ConditionalBuilder(
-              condition: state is! PlantsGetDataLoading?true:false,
+
+              // state is! ProductsGetDataLoading?true:false,
+              condition: state is! ProductsGetDataLoading?true:false,
               fallback: (BuildContext context) => Center(
                 child: CircularProgressIndicator(
                   color: HexColor("#1ABC00"),

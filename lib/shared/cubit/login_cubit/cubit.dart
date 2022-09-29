@@ -90,9 +90,14 @@ class LoginCubit extends Cubit<LoginStates> {
     DioHelper.postsData(
         url: LOGIN, data: {'email': email, 'password': password}).then((value) {
       loginModel = LoginModel.fromJson(value.data);
-      navigateTo(context, const HomeLayoutScreen());
+      navigateAndFinish(context, const HomeLayoutScreen());
+      print(loginModel?.data!.accessToken);
+
+      print( loginModel?.data!.refreshToken);
 
       CacheHelper.saveData(key: "token", value: loginModel?.data!.accessToken);
+      CacheHelper.saveData(key: "refreshToken", value: loginModel?.data!.refreshToken);
+
       // CacheHelper.saveData(
       //     key: "First Name", value: loginModel?.data!.userData?.firstName);
       // CacheHelper.saveData(
@@ -150,10 +155,8 @@ class LoginCubit extends Cubit<LoginStates> {
       navigateTo(context, const HomeLayoutScreen());
 
       CacheHelper.saveData(key: "token", value: signupModel?.data!.accessToken);
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlN2QxZTY2MS1hZjlkLTQ4NTUtYjMyZS1kYWMxYjMwYzMxZjEiLCJpYXQiOjE2NjEyOTk1ODIsImV4cCI6MTY2MTQ3MjM4Mn0.57oIiWBb-1mYXjoh4ehNRhKzlKb5tGAgg8nbOcr-5r0
-      // print(loginModel?.data!.userData!.firstMame);
-      // print(loginModel!.type);
-      // print(loginModel!.data!.accessToken);
+      CacheHelper.saveData(key: "refreshToken", value: loginModel?.data!.refreshToken);
+
       Fluttertoast.showToast(
           msg: signupModel?.message,
           toastLength: Toast.LENGTH_LONG,

@@ -12,6 +12,7 @@ void signOut(context, widget) {
 }
 
 String? token;
+String? refreshToken;
 bool? rememberMe;
 
 List<String> imageBlogs = [

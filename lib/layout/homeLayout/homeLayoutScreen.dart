@@ -22,10 +22,18 @@ class _HomeLayoutScreenState extends State<HomeLayoutScreen> {
     //     BuildContext context) => AppCubit()..getDataSeeds()
 
         providers: [
-          BlocProvider(create: (BuildContext context)=>AppCubit()..getUserData()
-    ..getDataPlants()
-    ..getDataTools(),),
-          BlocProvider(create: (BuildContext context)=>UserDataCubit()..getUserData(),),
+          BlocProvider(
+            create: (BuildContext context)=>AppCubit()
+            // ..getProducts()
+            // // ..getUserData()
+            // ..getDataPlants()
+            // ..getDataTools()
+            // ..getDataSeeds(),
+          ),
+          BlocProvider(
+            create: (BuildContext context)=>UserDataCubit()
+              ..getUserData(),
+          ),
         ],
         child: BlocConsumer<AppCubit, AppStates>(
           listener: (BuildContext context, state) {},

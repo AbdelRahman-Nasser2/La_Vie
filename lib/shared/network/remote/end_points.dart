@@ -9,3 +9,5 @@ const ALLPRODUCTS = 'api/v1/products/blogs';
 const SEEDS = 'api/v1/seeds';
 const PLANTS = 'api/v1/plants';
 const TOOLS = 'api/v1/tools';
+const PRODUCTS = '/api/v1/products';
+

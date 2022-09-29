@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:la_vie/models/user_model.dart';
+import 'package:la_vie/shared/components/components.dart';
 import 'package:la_vie/shared/components/constant.dart';
 import 'package:la_vie/shared/cubit/user_cubit/states.dart';
 import 'package:la_vie/shared/network/local/sharedpreference/sharedpreference.dart';
@@ -14,7 +15,9 @@ class UserDataCubit extends Cubit<UserDataStates> {
   var formKeyEmail = GlobalKey<FormState>();
   var formKeyName = GlobalKey<FormState>();
   var emailController = TextEditingController();
-  var nameController = TextEditingController();
+  var firstNameController = TextEditingController();
+  var lastNameController = TextEditingController();
+
 
 
 
@@ -24,7 +27,7 @@ class UserDataCubit extends Cubit<UserDataStates> {
     emit(UserGetDataLoading());
     DioHelper.getData(
       url: CRRENTUSER,
-      token: token,
+      token: refreshToken,
     ).then((value) {
       userCurrentModel = CurrentUserModel.fromJson(value.data);
       CacheHelper.saveData(
@@ -46,14 +49,45 @@ class UserDataCubit extends Cubit<UserDataStates> {
     });
   }
 
-  void updateUserData({required String key, required dynamic value}) {
-    emit(UpdateUserDataLoading());
-    DioHelper.patchData(url: UPDATEUSER, data: {key: value}, token: token!)
+
+
+  void updateUserName({
+     required dynamic firstValue,
+    required dynamic lastValue}) {
+    emit(UpdateUserNameLoading());
+    DioHelper.patchData(url: UPDATEUSER, data: {
+      'firstName':firstValue,
+      'lastName':lastValue
+      }, token: token!)
         .then((value) {
-      emit(UpdateUserDataSuccess());
+      emit(UpdateUserNameSuccess());
     }).catchError((error) {
-      emit(UpdateUserDataError(error));
+      emit(UpdateUserNameError(error));
     });
   }
+
+
+
+  void updateUserEmail({required String key, required dynamic value}) {
+    emit(UpdateUserEmailLoading());
+    DioHelper.patchData(url: UPDATEUSER, data: {key: value}, token: token!)
+        .then((value) {
+      emit(UpdateUserEmailSuccess());
+    }).catchError((error) {
+      emit(UpdateUserEmailError(error));
+    });
+  }
+
+
+
+  void signOut(context, widget) {
+    CacheHelper.removeData(key: 'token').then((value) {
+      if (value!) {
+        navigateAndFinish(context, widget);
+        showToast(text: 'LogOut', state: ToastStates.WARNING);
+      }
+    });
+  }
+
 
 }

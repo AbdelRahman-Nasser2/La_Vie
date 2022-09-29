@@ -1,9 +1,12 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:la_vie/layout/homeLayout/homeLayoutScreen.dart';
 import 'package:la_vie/shared/components/components.dart';
+import 'package:la_vie/shared/cubit/appCubit/cubit.dart';
 import 'package:la_vie/shared/cubit/login_cubit/cubit.dart';
 import 'package:la_vie/shared/cubit/login_cubit/states.dart';
 import 'package:la_vie/shared/style/colors.dart';
@@ -16,7 +19,33 @@ class LoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginStates>(
-        listener: (BuildContext context, state) {},
+        listener: (BuildContext context, states)  {
+          if (states is LoginSuccessState) {
+            if (states.loginModel.type=='Success') {
+              if (kDebugMode) {
+                print(states.loginModel.message);
+              }
+              AppCubit.get(context).getDataPlants();
+              AppCubit.get(context).getProducts();
+              AppCubit.get(context).getDataSeeds();
+              AppCubit.get(context).getDataTools();
+              showToast(
+                  text: states.loginModel.message.toString(),
+                  state: ToastStates.SUCCESS);
+            } else {
+              if (kDebugMode) {
+                print(states.loginModel.message);
+              }
+              showToast(
+                text: states.loginModel.message,
+                state: ToastStates.ERROR,
+              );
+            }
+          }
+
+
+
+        },
         builder: (BuildContext context, Object? state) {
           var loginCubit = LoginCubit.get(context);
           var emailController = TextEditingController();
@@ -91,7 +120,9 @@ class LoginScreen extends StatelessWidget {
                               loginCubit.logIn(context,
                                   email: emailController.text,
                                   password: passwordController.text);
+                              navigateTo(context, const HomeLayoutScreen());
                             }
+
                           });
                     },
                     fallback: (BuildContext context) =>
